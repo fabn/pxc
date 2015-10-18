@@ -1,16 +1,20 @@
 bootstrap:
   build: .
-  hostname: Dock1
-  command: sh -c "/usr/sbin/service mysql bootstrap-pxc --wsrep-node-name=Dock1 --skip-grant-tables  && tailf /dev/null"
+  hostname: cluster-bootstrap
+  command: --wsrep-node-name=Dock1 --skip-grant-tables --wsrep-new-cluster
+  environment:
+    MYSQL_ROOT_PASSWORD: 'toor'
   ports:
       - "3306"
       - "4567"
       - "4568"
-members:
+member:
   build: .
-  command: sh -c "/usr/sbin/service mysql start --wsrep-node-name=Dock${RANDOM} --wsrep_cluster_address=gcomm://Dock1 --skip-grant-tables --wsrep-sst-method=rsync && tailf /dev/null"
+  command: --wsrep_cluster_address=gcomm://bootstrap --skip-grant-tables --wsrep-sst-method=rsync
+  environment:
+    MYSQL_ROOT_PASSWORD: 'toor'
   links:
-      - bootstrap:Dock1
+      - bootstrap:bootstrap
   ports:
       - "3306"
       - "4567"
