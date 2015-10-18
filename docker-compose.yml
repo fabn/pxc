@@ -10,7 +10,7 @@ bootstrap:
       - "4568"
 member:
   build: .
-  command: --wsrep_cluster_address=gcomm://bootstrap --skip-grant-tables --wsrep-sst-method=rsync
+  command: --wsrep_cluster_address=gcomm://bootstrap --skip-grant-tables --wsrep-sst-method=xtrabackup-v2
   environment:
     MYSQL_ROOT_PASSWORD: 'toor'
   links:
